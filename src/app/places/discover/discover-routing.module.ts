@@ -6,12 +6,15 @@ import { DiscoverPage } from './discover.page';
 const routes: Routes = [
   {
     path: '',
-    component: DiscoverPage
-  },  {
-    path: 'place-detail',
-    loadChildren: () => import('./place-detail/place-detail.module').then( m => m.PlaceDetailPageModule)
-  }
-
+    component: DiscoverPage,
+  },
+  {
+    path: ':placeId',
+    loadChildren: () =>
+      import('./place-detail/place-detail.module').then(
+        (m) => m.PlaceDetailPageModule
+      ),
+  },
 ];
 
 @NgModule({
