@@ -5,9 +5,9 @@ import { NewOfferPage } from './new-offer.page';
 
 const routes: Routes = [
   {
-    path: '',
-    component: NewOfferPage
-  }
+    path: 'new',
+    component: NewOfferPage,
+  },
 ];
 
 @NgModule({

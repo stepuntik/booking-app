@@ -5,9 +5,9 @@ import { OfferBookingsPage } from './offer-bookings.page';
 
 const routes: Routes = [
   {
-    path: '',
-    component: OfferBookingsPage
-  }
+    path: ':placeId',
+    component: OfferBookingsPage,
+  },
 ];
 
 @NgModule({

@@ -5,9 +5,9 @@ import { EditOfferPage } from './edit-offer.page';
 
 const routes: Routes = [
   {
-    path: '',
-    component: EditOfferPage
-  }
+    path: 'edit/:placeId',
+    component: EditOfferPage,
+  },
 ];
 
 @NgModule({
