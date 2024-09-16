@@ -5,7 +5,7 @@ import { NewOfferPage } from './new-offer.page';
 
 const routes: Routes = [
   {
-    path: 'new',
+    path: '',
     component: NewOfferPage,
   },
 ];
