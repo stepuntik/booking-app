@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
 import { PlacesService } from '../../places.service';
 import { Place } from '../../place.model';
+import { CreateBookingComponent } from '../../../bookings/create-booking/create-booking.component';
 
 @Component({
   selector: 'app-place-detail',
@@ -13,10 +14,10 @@ export class PlaceDetailPage implements OnInit {
   place?: Place;
 
   constructor(
-    // private router: Router,
     private route: ActivatedRoute,
     private navCtrl: NavController,
-    private placeService: PlacesService
+    private placeService: PlacesService,
+    private modalCtrl: ModalController
   ) {}
 
   ngOnInit() {
@@ -24,8 +25,24 @@ export class PlaceDetailPage implements OnInit {
   }
 
   onBookPlace() {
-    // this.router.navigateByUrl('/places/tabs/discover'); // slide UP animation (as forward)
-    this.navCtrl.navigateBack('/places/tabs/discover'); // slide DOWN animation (as backward)
+    this.modalCtrl
+      .create({
+        component: CreateBookingComponent,
+        componentProps: {
+          selectedPlace: this.place,
+        },
+      })
+      .then((modalEl) => {
+        modalEl.present();
+        return modalEl.onDidDismiss();
+      })
+      .then((resultData) => {
+        console.log(resultData.data, resultData.role);
+
+        if (resultData.role === 'confirm') {
+          console.log('BOOKED!');
+        }
+      });
   }
 
   loadPlace() {
