@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModalController, NavController } from '@ionic/angular';
+import {
+  ActionSheetController,
+  ModalController,
+  NavController,
+} from '@ionic/angular';
 import { PlacesService } from '../../places.service';
 import { Place } from '../../place.model';
 import { CreateBookingComponent } from '../../../bookings/create-booking/create-booking.component';
@@ -17,7 +21,8 @@ export class PlaceDetailPage implements OnInit {
     private route: ActivatedRoute,
     private navCtrl: NavController,
     private placeService: PlacesService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private actionSheetCtrl: ActionSheetController
   ) {}
 
   ngOnInit() {
@@ -25,6 +30,44 @@ export class PlaceDetailPage implements OnInit {
   }
 
   onBookPlace() {
+    this.actionSheetCtrl
+      .create({
+        header: 'Choose an Action',
+        buttons: [
+          {
+            text: 'Select Date',
+            handler: () => {
+              this.openBookingModal('select');
+            },
+          },
+          {
+            text: 'Random Date',
+            handler: () => {
+              this.openBookingModal('random');
+            },
+          },
+          { text: 'Cancel', role: 'cancel' },
+        ],
+      })
+      .then((actionSheetEl) => {
+        actionSheetEl.present();
+      });
+  }
+
+  loadPlace() {
+    this.route.paramMap.subscribe((paramMap) => {
+      if (!paramMap.has('placeId')) {
+        this.navCtrl.navigateBack('/places/tabs/discover');
+        return;
+      }
+
+      this.place = this.placeService.getPlace(paramMap.get('placeId')!);
+    });
+  }
+
+  openBookingModal(mode: 'select' | 'random') {
+    console.log(mode);
+
     this.modalCtrl
       .create({
         component: CreateBookingComponent,
@@ -43,16 +86,5 @@ export class PlaceDetailPage implements OnInit {
           console.log('BOOKED!');
         }
       });
-  }
-
-  loadPlace() {
-    this.route.paramMap.subscribe((paramMap) => {
-      if (!paramMap.has('placeId')) {
-        this.navCtrl.navigateBack('/places/tabs/discover');
-        return;
-      }
-
-      this.place = this.placeService.getPlace(paramMap.get('placeId')!);
-    });
   }
 }
